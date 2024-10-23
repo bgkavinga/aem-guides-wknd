@@ -24,9 +24,10 @@ import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
 import org.apache.sling.models.annotations.injectorspecific.SlingObject;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
-
+import com.adobe.aem.guides.wknd.core.adventures.Activities;
 import com.day.cq.wcm.api.Page;
 import com.day.cq.wcm.api.PageManager;
 
@@ -43,6 +44,9 @@ public class HelloWorldModel {
     private Resource currentResource;
     @SlingObject
     private ResourceResolver resourceResolver;
+
+    @OSGiService
+    private Activities activities;
 
     private String message;
 
@@ -61,5 +65,10 @@ public class HelloWorldModel {
     public String getMessage() {
         return message;
     }
+
+    public String getActivity(){
+        return activities.getRandomActivity();
+    }
+    
 
 }
