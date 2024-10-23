@@ -1,0 +1,26 @@
+{
+    "activities": [
+        "Camping",
+        "Skiing",
+        "Skateboarding",
+        "Hiking",
+        "Kayaking",
+        "Rock climbing",
+        "Biking",
+        "Surfing",
+        "Birdwatching",
+        "Gardening",
+        "Photography",
+        "Painting",
+        "Yoga",
+        "Running",
+        "Fishing",
+        "Cooking",
+        "Dancing",
+        "Playing musical instruments",
+        "Volunteering",
+        "Traveling",
+        "Reading"
+    ],
+    "random.seed:Integer": 32
+}

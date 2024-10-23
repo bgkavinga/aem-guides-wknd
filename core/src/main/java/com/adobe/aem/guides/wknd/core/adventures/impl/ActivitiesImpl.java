@@ -1,45 +1,67 @@
 package com.adobe.aem.guides.wknd.core.adventures.impl;
 
 import java.util.Random;
+
+import com.adobe.aem.guides.wknd.core.adventures.Activities;
+
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.metatype.annotations.AttributeDefinition;
+import org.osgi.service.metatype.annotations.Designate;
+import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.adobe.aem.guides.wknd.core.adventures.Activities;
 
 @Component(
     service = { Activities.class }
 )
+@Designate(ocd = ActivitiesImpl.Config.class)
 public class ActivitiesImpl implements Activities {
-
     private static final Logger log = LoggerFactory.getLogger(ActivitiesImpl.class);
 
+    @ObjectClassDefinition(
+        name = "WKND Examples - Activities Service",
+        description = "OSGi Service providing information about WKND Adventures activities"
+    )
+    @interface Config {
 
-    private static final String[] ACTIVITIES = new String[] {
-        "Camping", "Skiing", "Skateboarding", 
-        "Hiking", "Kayaking", "Rock climbing", 
-        "Biking", "Surfing", "Birdwatching", 
-        "Gardening", "Photography", "Painting", 
-        "Yoga"
-    };
-    
+        @AttributeDefinition(
+            name = "WKND Activities",
+            description = "Human-friendly list of activity names"
+        )
+        String[] activities() default { "Hiking", "Jogging", "Walking" };
 
-    private final int randomIndex = new Random().nextInt(ACTIVITIES.length);
-    // private final Random random = new Random();
+        @AttributeDefinition(
+            name = "Random Activity Seed",
+            description = "Seed used to randomize activity selection"
+        )
+        int random_seed() default 10;
+
+    }
+
+    private String[] activities;
+
+    private Random random;
 
     /**
      * @return the name of a random WKND adventure activity
      */
     public String getRandomActivity() {
-        // int randomIndex = random.nextInt(ACTIVITIES.length);
-        return ACTIVITIES[randomIndex];
+        int randomIndex = random.nextInt(activities.length);
+        return activities[randomIndex];
     }
 
     @Activate
-    protected void activate() {
+    protected void activate(Config config) {
 
-        log.info("Activated ActivitiesImpl with activities [ {} ]", String.join(", ", ActivitiesImpl.ACTIVITIES));
+        this.activities = config.activities();
+
+        final int randomSeed = config.random_seed();
+
+        this.random = new Random(randomSeed);
+
+        log.info("Activated ActivitiesImpl with activities [ {} ]", String.join(", ", this.activities));
     }
 
     @Deactivate
